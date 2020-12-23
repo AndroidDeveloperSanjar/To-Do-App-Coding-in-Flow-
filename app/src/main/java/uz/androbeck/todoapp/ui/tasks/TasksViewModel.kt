@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import uz.androbeck.todoapp.data.PreferencesManager
 import uz.androbeck.todoapp.data.SortOrder
+import uz.androbeck.todoapp.data.Task
 import uz.androbeck.todoapp.data.TaskDao
 
 class TasksViewModel @ViewModelInject constructor(
@@ -30,6 +31,8 @@ class TasksViewModel @ViewModelInject constructor(
         taskDao.getTasks(query, filterPreferences.sortOrder, filterPreferences.hideCompleted)
     }
 
+    val tasks = tasksFlow.asLiveData()
+
     fun onSortOrderSelected(sortOrder: SortOrder) = viewModelScope.launch {
         preferencesManager.updateSortOrder(sortOrder)
     }
@@ -38,6 +41,10 @@ class TasksViewModel @ViewModelInject constructor(
         preferencesManager.updateHideCompleted(hideCompleted)
     }
 
-    val tasks = tasksFlow.asLiveData()
+    fun onTaskSelected(task: Task) {}
+
+    fun onTaskCheckedChanged(task: Task, isChecked: Boolean) = viewModelScope.launch {
+        taskDao.update(task.copy(completed = isChecked))
+    }
 
 }

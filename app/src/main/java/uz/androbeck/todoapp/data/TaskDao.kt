@@ -2,7 +2,6 @@ package uz.androbeck.todoapp.data
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
-import uz.androbeck.todoapp.ui.tasks.SortOrder
 
 @Dao
 interface TaskDao {
